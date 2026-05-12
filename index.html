@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Psychoacoustic Modifications</title>
+<style>
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 1.2em;
+    line-height: 1.5;
+    color: #222;
+    background: #fff;
+  }
+  h1 { font-weight: 500; margin-bottom: 0.2em; }
+  .intro { color: #666; margin-bottom: 1.5em; }
+  .nav-buttons { margin: 1em 0 1.5em; }
+  .nav-buttons button {
+    padding: 0.55em 1em;
+    margin: 0 0.4em 0.4em 0;
+    border: 1px solid #ccc;
+    background: #f7f7f7;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 0.95em;
+    font-family: inherit;
+  }
+  .nav-buttons button.active {
+    background: #2c5aa0;
+    color: white;
+    border-color: #2c5aa0;
+  }
+  .stimulus {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 0.9em 1em;
+    margin: 0.7em 0;
+    background: #fafafa;
+  }
+  .stimulus.baseline {
+    background: #f0f4f9;
+    border-color: #b8c8db;
+  }
+  .stimulus h3 {
+    margin: 0 0 0.5em 0;
+    font-weight: 500;
+    font-size: 1.05em;
+  }
+  .stimulus .spl {
+    font-weight: 400;
+    color: #888;
+    font-size: 0.9em;
+  }
+  .stimulus audio {
+    width: 100%;
+    margin: 0.4em 0 0.7em;
+  }
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.5em;
+  }
+  .metric {
+    background: white;
+    padding: 0.45em 0.7em;
+    border-radius: 4px;
+    border: 1px solid #eee;
+  }
+  .metric .name { font-size: 0.75em; color: #888; text-transform: uppercase; letter-spacing: 0.05em; }
+  .metric .value { font-size: 1.1em; font-weight: 500; margin-top: 0.1em; }
+  .metric .delta { font-size: 0.82em; margin-top: 0.1em; color: #888; }
+  .delta.positive { color: #2c5aa0; }
+  .delta.negative { color: #c25c2c; }
+  .modifications-header {
+    margin: 1.8em 0 0.5em 0;
+    font-size: 0.8em;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .loading { color: #888; font-style: italic; }
+</style>
+</head>
+<body>
+<h1>Psychoacoustic Modifications</h1>
+<p class="intro">Listen to each modification and observe how it changes the four standard psychoacoustic metrics (Loudness, Sharpness, Roughness, SII). Numbers next to each metric show the difference from the baseline.</p>
+
+<div class="nav-buttons" id="nav"></div>
+<div id="content"><p class="loading">Loading…</p></div>
+
+<script>
+const REFERENCES = ['pink_noise', 'refrigerator', 'livelypublicgarden', 'adult_female_speech'];
+const REFERENCE_LABELS = {
+  'pink_noise': 'Pink Noise',
+  'refrigerator': 'Refrigerator',
+  'livelypublicgarden': 'Public Garden',
+  'adult_female_speech': 'Female Speech'
+};
+
+const METRICS = [
+  {key: 'loudness_sone',   label: 'Loudness',  unit: 'sone'},
+  {key: 'sharpness_acum',  label: 'Sharpness', unit: 'acum'},
+  {key: 'roughness_asper', label: 'Roughness', unit: 'asper'},
+  {key: 'sii',             label: 'SII',       unit: ''}
+];
+
+// Orden lógico de modificaciones (severidad creciente dentro de cada grupo)
+const MOD_INDEX = {
+  'level_m6': 0,  'level_m3': 1,  'level_p3': 2,  'level_p6': 3,
+  'lp_4kHz':  4,  'lp_2kHz':  5,  'lp_1kHz':  6,
+  'am70_d05': 7,  'am70_d10': 8,
+  'tone_62_20dB': 9, 'tone_62_40dB': 10,
+};
+
+let allData = [];
+
+async function loadData() {
+  const response = await fetch('results/metrics_table.csv');
+  const text = await response.text();
+  const lines = text.trim().split('\n');
+  const headers = lines[0].split(',');
+
+  allData = lines.slice(1).map(line => {
+    const values = line.split(',');
+    const row = {};
+    headers.forEach((h, i) => {
+      const v = values[i];
+      const num = parseFloat(v);
+      row[h] = (isNaN(num) || v.trim() === '') ? v : num;
+    });
+    return row;
+  });
+
+  renderNav();
+  showReference(REFERENCES[0]);
+}
+
+function renderNav() {
+  const nav = document.getElementById('nav');
+  nav.innerHTML = '';
+  REFERENCES.forEach((ref, i) => {
+    const btn = document.createElement('button');
+    btn.textContent = REFERENCE_LABELS[ref];
+    btn.onclick = () => {
+      document.querySelectorAll('.nav-buttons button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      showReference(ref);
+    };
+    if (i === 0) btn.classList.add('active');
+    nav.appendChild(btn);
+  });
+}
+
+function formatModName(mod) {
+  if (mod === 'baseline') return 'Baseline';
+  if (mod.startsWith('level_')) {
+    const num = mod.replace(/[^0-9]/g, '');
+    const sign = mod.includes('_p') ? '+' : '−';
+    return `Level ${sign}${num} dB`;
+  }
+  if (mod.startsWith('lp_')) return `Low-pass at ${mod.replace('lp_', '')}`;
+  if (mod.startsWith('am70_d')) {
+    const d = mod.replace('am70_d', '');
+    const depth = '0.' + d.replace(/^0/, '');
+    return `AM 70 Hz, depth ${parseFloat(depth)}`;
+  }
+  if (mod.startsWith('tone_')) {
+    const parts = mod.split('_');
+    return `Tone attenuation ${parts[1]} Hz, ${parts[2]}`;
+  }
+  return mod;
+}
+
+function modSortKey(mod) {
+  return String(MOD_INDEX[mod] ?? 99).padStart(3, '0') + '_' + mod;
+}
+
+function formatValue(value, key) {
+  if (key === 'sii') return value.toFixed(3);
+  if (key === 'loudness_sone') return value.toFixed(2);
+  return value.toFixed(3);
+}
+
+function formatDelta(delta, key) {
+  const abs = Math.abs(delta);
+  if ((abs < 0.005 && key !== 'sii') || abs < 0.001) return '=';
+  const sign = delta > 0 ? '+' : '−';
+  if (key === 'sii') return `${sign}${abs.toFixed(3)}`;
+  if (key === 'loudness_sone') return `${sign}${abs.toFixed(2)}`;
+  return `${sign}${abs.toFixed(3)}`;
+}
+
+function renderStimulus(row, baseline, isBaseline) {
+  const div = document.createElement('div');
+  div.className = 'stimulus' + (isBaseline ? ' baseline' : '');
+
+  const label = formatModName(row.modification);
+  const spl = ` <span class="spl">${row.spl_db.toFixed(1)} dB SPL</span>`;
+
+  div.innerHTML = `<h3>${label}${spl}</h3>
+    <audio controls preload="none" src="data/stimuli/${row.filename}"></audio>
+    <div class="metrics"></div>`;
+
+  const metricsDiv = div.querySelector('.metrics');
+  METRICS.forEach(m => {
+    const value = row[m.key];
+    const mDiv = document.createElement('div');
+    mDiv.className = 'metric';
+
+    let deltaHtml = '';
+    if (!isBaseline) {
+      const delta = value - baseline[m.key];
+      const cls = Math.abs(delta) < 0.001 ? '' : (delta > 0 ? ' positive' : ' negative');
+      deltaHtml = `<div class="delta${cls}">${formatDelta(delta, m.key)}</div>`;
+    }
+    mDiv.innerHTML = `
+      <div class="name">${m.label}${m.unit ? ` (${m.unit})` : ''}</div>
+      <div class="value">${formatValue(value, m.key)}</div>
+      ${deltaHtml}
+    `;
+    metricsDiv.appendChild(mDiv);
+  });
+
+  return div;
+}
+
+function showReference(ref) {
+  const content = document.getElementById('content');
+  content.innerHTML = '';
+
+  const rows = allData.filter(r => r.reference === ref);
+  const baseline = rows.find(r => r.modification === 'baseline');
+  const modifications = rows.filter(r => r.modification !== 'baseline')
+    .sort((a, b) => modSortKey(a.modification).localeCompare(modSortKey(b.modification)));
+
+  if (!baseline) {
+    content.innerHTML = `<p>No baseline found for ${ref}</p>`;
+    return;
+  }
+
+  content.appendChild(renderStimulus(baseline, baseline, true));
+
+  const header = document.createElement('div');
+  header.className = 'modifications-header';
+  header.textContent = 'Modifications';
+  content.appendChild(header);
+
+  modifications.forEach(row => content.appendChild(renderStimulus(row, baseline, false)));
+}
+
+loadData().catch(err => {
+  document.getElementById('content').innerHTML =
+    `<p style="color:#c25c2c">Error loading data: ${err.message}.
+     Make sure you're running the server from the project root.</p>`;
+});
+</script>
+</body>
+</html>

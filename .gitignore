@@ -216,3 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# remove any wav file in the repo. it doesn't matter where it is, we don't want it in the repo
+*.wav
