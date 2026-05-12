@@ -220,3 +220,4 @@ __marimo__/
 # remove any wav file in the directory data/stimuli/
 data/stimuli/*.wav
 data/reference_raw/*.wav
+data/reference_raw/*.mp3
