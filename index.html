@@ -1,260 +1,331 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Psychoacoustic Modifications</title>
+<title>Perceptual Rating Task</title>
 <style>
   body {
     font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    max-width: 880px;
+    max-width: 760px;
     margin: 0 auto;
-    padding: 1.2em;
+    padding: 1em;
     line-height: 1.5;
     color: #222;
     background: #fff;
   }
-  h1 { font-weight: 500; margin-bottom: 0.2em; }
-  .intro { color: #666; margin-bottom: 1.5em; }
-  .nav-buttons { margin: 1em 0 1.5em; }
-  .nav-buttons button {
-    padding: 0.55em 1em;
-    margin: 0 0.4em 0.4em 0;
+  h1 { font-weight: 500; margin-bottom: 0.3em; }
+  .instructions {
+    background: #f0f4f9;
+    border: 1px solid #b8c8db;
+    border-radius: 6px;
+    padding: 0.9em 1.1em;
+    margin-bottom: 1.5em;
+    font-size: 0.93em;
+  }
+  .instructions ol { margin: 0.4em 0 0; padding-left: 1.3em; }
+  .instructions strong { color: #2c5aa0; }
+  .id-input { margin-bottom: 1.5em; }
+  .id-input input {
+    padding: 0.5em;
     border: 1px solid #ccc;
-    background: #f7f7f7;
-    cursor: pointer;
     border-radius: 4px;
-    font-size: 0.95em;
+    font-size: 1em;
+    width: 100%;
+    max-width: 320px;
     font-family: inherit;
   }
-  .nav-buttons button.active {
-    background: #2c5aa0;
-    color: white;
-    border-color: #2c5aa0;
+  .block { margin: 2em 0; }
+  .block-header {
+    font-size: 1.2em;
+    font-weight: 500;
+    color: #2c5aa0;
+    border-bottom: 2px solid #2c5aa0;
+    padding-bottom: 0.3em;
+    margin-bottom: 0.7em;
+  }
+  .reference {
+    background: #fff8e1;
+    border: 1px solid #e0c97a;
+    border-radius: 6px;
+    padding: 1em;
+    margin-bottom: 0.7em;
+  }
+  .reference h3 { margin: 0 0 0.4em 0; font-weight: 500; }
+  .reference-note {
+    color: #8a6d28;
+    font-size: 0.88em;
+    margin-bottom: 0.6em;
   }
   .stimulus {
     border: 1px solid #ddd;
     border-radius: 6px;
-    padding: 0.9em 1em;
+    padding: 1em;
     margin: 0.7em 0;
     background: #fafafa;
   }
-  .stimulus.baseline {
-    background: #f0f4f9;
-    border-color: #b8c8db;
-  }
   .stimulus h3 {
-    margin: 0 0 0.5em 0;
+    margin: 0 0 0.3em 0;
     font-weight: 500;
-    font-size: 1.05em;
+    font-size: 1.02em;
   }
-  .stimulus .spl {
-    font-weight: 400;
+  .stimulus .description {
+    color: #555;
+    font-size: 0.88em;
+    margin-bottom: 0.7em;
+    font-style: italic;
+  }
+  audio { width: 100%; margin-bottom: 0.9em; }
+  .scale { margin: 0.9em 0; }
+  .scale-label {
+    font-weight: 500;
+    margin-bottom: 0.2em;
+    font-size: 0.95em;
+  }
+  .scale-anchors {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78em;
     color: #888;
-    font-size: 0.9em;
+    margin-bottom: 0.3em;
   }
-  .stimulus audio {
-    width: 100%;
-    margin: 0.4em 0 0.7em;
-  }
-  .metrics {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 0.5em;
-  }
-  .metric {
-    background: white;
-    padding: 0.45em 0.7em;
+  .scale-options { display: flex; gap: 0.3em; }
+  .scale-options input[type="radio"] { display: none; }
+  .scale-options label {
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+    padding: 0.55em 0;
+    border: 1px solid #ccc;
     border-radius: 4px;
-    border: 1px solid #eee;
+    background: white;
+    font-size: 0.95em;
+    user-select: none;
   }
-  .metric .name { font-size: 0.75em; color: #888; text-transform: uppercase; letter-spacing: 0.05em; }
-  .metric .value { font-size: 1.1em; font-weight: 500; margin-top: 0.1em; }
-  .metric .delta { font-size: 0.82em; margin-top: 0.1em; color: #888; }
-  .delta.positive { color: #2c5aa0; }
-  .delta.negative { color: #c25c2c; }
-  .modifications-header {
-    margin: 1.8em 0 0.5em 0;
-    font-size: 0.8em;
-    color: #888;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+  .scale-options input[type="radio"]:checked + label {
+    background: #2c5aa0;
+    color: white;
+    border-color: #2c5aa0;
   }
-  .loading { color: #888; font-style: italic; }
+  .submit-bar {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    border-top: 1px solid #ddd;
+    padding: 0.8em 0;
+    text-align: center;
+    margin: 0 -1em;
+  }
+  .progress { color: #888; font-size: 0.9em; margin-bottom: 0.5em; }
+  .submit-btn {
+    padding: 0.7em 2em;
+    background: #2c5aa0;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1em;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .submit-btn:disabled { background: #aaa; cursor: not-allowed; }
 </style>
 </head>
 <body>
-<h1>Psychoacoustic Modifications</h1>
-<p class="intro">Listen to each modification and observe how it changes the four standard psychoacoustic metrics (Loudness, Sharpness, Roughness, SII). Numbers next to each metric show the difference from the baseline.</p>
 
-<div class="nav-buttons" id="nav"></div>
-<div id="content"><p class="loading">Loading…</p></div>
+<h1>Perceptual Rating Task</h1>
+
+<div class="instructions">
+  <p><strong>Instrucciones:</strong></p>
+  <ol>
+    <li>Pon el volumen de tus auriculares en un nivel cómodo con el primer audio. <strong>No modifiques el volumen durante el resto del test.</strong></li>
+    <li>Para cada bloque: <strong>escucha primero el audio de referencia</strong> (en amarillo). Luego escucha cada modificación.</li>
+    <li>Puntúa cada modificación en dos escalas:
+      <ul>
+        <li><strong>Consonancia / Disonancia</strong> — un sonido es consonante si te resulta armonioso, fluido. Disonante si te resulta chocante, áspero, tenso.</li>
+        <li><strong>Agradabilidad comparada con la referencia</strong> — ¿es este audio más, igual o menos agradable que el audio de referencia?</li>
+      </ul>
+    </li>
+    <li>Al terminar pulsa "Descargar mis resultados" y mándame el CSV.</li>
+  </ol>
+</div>
+
+<div class="id-input">
+  <label>Tu nombre o ID (anónimo OK):</label><br>
+  <input type="text" id="raterId" placeholder="ej. Andrés / R001">
+</div>
+
+<div id="blocks-container"></div>
+
+<div class="submit-bar">
+  <div class="progress" id="progress"></div>
+  <button class="submit-btn" id="submitBtn" disabled>Descargar mis resultados</button>
+</div>
 
 <script>
-const REFERENCES = ['pink_noise', 'refrigerator', 'livelypublicgarden', 'adult_female_speech'];
-const REFERENCE_LABELS = {
-  'pink_noise': 'Pink Noise',
-  'refrigerator': 'Refrigerator',
-  'livelypublicgarden': 'Public Garden',
-  'adult_female_speech': 'Female Speech'
-};
-
-const METRICS = [
-  {key: 'loudness_sone',   label: 'Loudness',  unit: 'sone'},
-  {key: 'sharpness_acum',  label: 'Sharpness', unit: 'acum'},
-  {key: 'roughness_asper', label: 'Roughness', unit: 'asper'},
-  {key: 'sii',             label: 'SII',       unit: ''}
+// === EDITAR AQUÍ: bloques de test ===
+const TEST_BLOCKS = [
+  {
+    reference: 'pink_noise',
+    referenceLabel: 'Pink Noise (ruido rosa)',
+    referenceFile: 'pink_noise__baseline.wav',
+    referenceDescription: 'Ruido rosa estacionario, contiene todas las frecuencias con energía decreciente hacia los agudos.',
+    modifications: [
+      { file: 'pink_noise__level_m6.wav', label: 'Nivel −6 dB',
+        description: 'Hemos bajado el nivel global 6 dB. Mismo contenido, más silencioso.' },
+      { file: 'pink_noise__level_p6.wav', label: 'Nivel +6 dB',
+        description: 'Hemos subido el nivel global 6 dB. Mismo contenido, más fuerte.' },
+      { file: 'pink_noise__lp_1kHz.wav', label: 'Filtro paso bajo a 1 kHz',
+        description: 'Hemos eliminado las frecuencias por encima de 1 kHz. Quedan solo los graves y medios bajos — suena opaco, sin agudos.' },
+      { file: 'pink_noise__am70_d10.wav', label: 'Modulación de amplitud a 70 Hz',
+        description: 'Hemos modulado el volumen a 70 Hz al 100%. Aparece una sensación rápida de aspereza/batido.' },
+    ]
+  },
+  {
+    reference: 'refrigerator',
+    referenceLabel: 'Refrigerador',
+    referenceFile: 'refrigerator__baseline.wav',
+    referenceDescription: 'Grabación del interior de una nevera real: zumbido grave del compresor con algo de ruido de fondo.',
+    modifications: [
+      { file: 'refrigerator__level_m6.wav', label: 'Nivel −6 dB',
+        description: 'Hemos bajado el nivel global 6 dB. Mismo contenido, más silencioso.' },
+      { file: 'refrigerator__level_p6.wav', label: 'Nivel +6 dB',
+        description: 'Hemos subido el nivel global 6 dB. Mismo contenido, más fuerte.' },
+      { file: 'refrigerator__lp_1kHz.wav', label: 'Filtro paso bajo a 1 kHz',
+        description: 'Hemos eliminado las frecuencias por encima de 1 kHz. Quedan solo el zumbido y los graves.' },
+      { file: 'refrigerator__am70_d10.wav', label: 'Modulación de amplitud a 70 Hz',
+        description: 'Hemos modulado el volumen a 70 Hz al 100%. Aparece una sensación rápida de aspereza/batido sobre el zumbido.' },
+    ]
+  },
+  {
+    reference: 'livelypublicgarden',
+    referenceLabel: 'Parque público',
+    referenceFile: 'livelypublicgarden__baseline.wav',
+    referenceDescription: 'Ambiente de parque con gente, voces de niños jugando y ruido de fondo natural.',
+    modifications: [
+      { file: 'livelypublicgarden__level_m6.wav', label: 'Nivel −6 dB',
+        description: 'Hemos bajado el nivel global 6 dB. Mismo contenido, más silencioso.' },
+      { file: 'livelypublicgarden__level_p6.wav', label: 'Nivel +6 dB',
+        description: 'Hemos subido el nivel global 6 dB. Mismo contenido, más fuerte.' },
+      { file: 'livelypublicgarden__lp_1kHz.wav', label: 'Filtro paso bajo a 1 kHz',
+        description: 'Hemos eliminado las frecuencias por encima de 1 kHz. Las voces y los agudos del ambiente se atenúan mucho.' },
+      { file: 'livelypublicgarden__am70_d10.wav', label: 'Modulación de amplitud a 70 Hz',
+        description: 'Hemos modulado el volumen a 70 Hz al 100%. Aparece una sensación rápida de aspereza/batido.' },
+    ]
+  },
 ];
 
-// Orden lógico de modificaciones (severidad creciente dentro de cada grupo)
-const MOD_INDEX = {
-  'level_m6': 0,  'level_m3': 1,  'level_p3': 2,  'level_p6': 3,
-  'lp_4kHz':  4,  'lp_2kHz':  5,  'lp_1kHz':  6,
-  'am70_d05': 7,  'am70_d10': 8,
-  'tone_62_20dB': 9, 'tone_62_40dB': 10,
-};
+const SCALES = [
+  { id: 'consonance', label: 'Consonancia / Disonancia',
+    low: 'muy disonante', high: 'muy consonante' },
+  { id: 'pleasantness_vs_ref', label: 'Agradabilidad comparada con la referencia',
+    low: 'mucho menos', high: 'mucho más' },
+];
 
-let allData = [];
-
-async function loadData() {
-  const response = await fetch('results/metrics_table.csv');
-  const text = await response.text();
-  const lines = text.trim().split('\n');
-  const headers = lines[0].split(',');
-
-  allData = lines.slice(1).map(line => {
-    const values = line.split(',');
-    const row = {};
-    headers.forEach((h, i) => {
-      const v = values[i];
-      const num = parseFloat(v);
-      row[h] = (isNaN(num) || v.trim() === '') ? v : num;
-    });
-    return row;
-  });
-
-  renderNav();
-  showReference(REFERENCES[0]);
-}
-
-function renderNav() {
-  const nav = document.getElementById('nav');
-  nav.innerHTML = '';
-  REFERENCES.forEach((ref, i) => {
-    const btn = document.createElement('button');
-    btn.textContent = REFERENCE_LABELS[ref];
-    btn.onclick = () => {
-      document.querySelectorAll('.nav-buttons button').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      showReference(ref);
-    };
-    if (i === 0) btn.classList.add('active');
-    nav.appendChild(btn);
-  });
-}
-
-function formatModName(mod) {
-  if (mod === 'baseline') return 'Baseline';
-  if (mod.startsWith('level_')) {
-    const num = mod.replace(/[^0-9]/g, '');
-    const sign = mod.includes('_p') ? '+' : '−';
-    return `Level ${sign}${num} dB`;
+// Shuffle helpers
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
   }
-  if (mod.startsWith('lp_')) return `Low-pass at ${mod.replace('lp_', '')}`;
-  if (mod.startsWith('am70_d')) {
-    const d = mod.replace('am70_d', '');
-    const depth = '0.' + d.replace(/^0/, '');
-    return `AM 70 Hz, depth ${parseFloat(depth)}`;
-  }
-  if (mod.startsWith('tone_')) {
-    const parts = mod.split('_');
-    return `Tone attenuation ${parts[1]} Hz, ${parts[2]}`;
-  }
-  return mod;
+  return a;
 }
 
-function modSortKey(mod) {
-  return String(MOD_INDEX[mod] ?? 99).padStart(3, '0') + '_' + mod;
-}
+// Shuffle order of blocks AND order of modifications within each block
+const blocks = shuffle(TEST_BLOCKS).map(b => ({
+  ...b,
+  modifications: shuffle(b.modifications)
+}));
 
-function formatValue(value, key) {
-  if (key === 'sii') return value.toFixed(3);
-  if (key === 'loudness_sone') return value.toFixed(2);
-  return value.toFixed(3);
-}
+const container = document.getElementById('blocks-container');
 
-function formatDelta(delta, key) {
-  const abs = Math.abs(delta);
-  if ((abs < 0.005 && key !== 'sii') || abs < 0.001) return '=';
-  const sign = delta > 0 ? '+' : '−';
-  if (key === 'sii') return `${sign}${abs.toFixed(3)}`;
-  if (key === 'loudness_sone') return `${sign}${abs.toFixed(2)}`;
-  return `${sign}${abs.toFixed(3)}`;
-}
+blocks.forEach((block, blockIdx) => {
+  const blockDiv = document.createElement('div');
+  blockDiv.className = 'block';
 
-function renderStimulus(row, baseline, isBaseline) {
-  const div = document.createElement('div');
-  div.className = 'stimulus' + (isBaseline ? ' baseline' : '');
+  let html = `
+    <div class="block-header">Bloque ${blockIdx + 1}: ${block.referenceLabel}</div>
+    <div class="reference">
+      <h3>📌 Audio de referencia</h3>
+      <div class="reference-note">${block.referenceDescription}<br>
+        <em>Escúchalo bien antes de pasar a las modificaciones.</em></div>
+      <audio controls preload="none" src="data/stimuli/${block.referenceFile}"></audio>
+    </div>
+  `;
 
-  const label = formatModName(row.modification);
-  const spl = ` <span class="spl">${row.spl_db.toFixed(1)} dB SPL</span>`;
-
-  div.innerHTML = `<h3>${label}${spl}</h3>
-    <audio controls preload="none" src="data/stimuli/${row.filename}"></audio>
-    <div class="metrics"></div>`;
-
-  const metricsDiv = div.querySelector('.metrics');
-  METRICS.forEach(m => {
-    const value = row[m.key];
-    const mDiv = document.createElement('div');
-    mDiv.className = 'metric';
-
-    let deltaHtml = '';
-    if (!isBaseline) {
-      const delta = value - baseline[m.key];
-      const cls = Math.abs(delta) < 0.001 ? '' : (delta > 0 ? ' positive' : ' negative');
-      deltaHtml = `<div class="delta${cls}">${formatDelta(delta, m.key)}</div>`;
-    }
-    mDiv.innerHTML = `
-      <div class="name">${m.label}${m.unit ? ` (${m.unit})` : ''}</div>
-      <div class="value">${formatValue(value, m.key)}</div>
-      ${deltaHtml}
+  block.modifications.forEach((mod, modIdx) => {
+    const uid = `b${blockIdx}_m${modIdx}`;
+    html += `
+      <div class="stimulus" data-filename="${mod.file}" data-reference="${block.reference}">
+        <h3>${mod.label}</h3>
+        <div class="description">${mod.description}</div>
+        <audio controls preload="none" src="data/stimuli/${mod.file}"></audio>
+        ${SCALES.map(s => `
+          <div class="scale">
+            <div class="scale-label">${s.label}</div>
+            <div class="scale-anchors">
+              <span>1 — ${s.low}</span>
+              <span>7 — ${s.high}</span>
+            </div>
+            <div class="scale-options">
+              ${[1,2,3,4,5,6,7].map(n => `
+                <input type="radio" name="${uid}_${s.id}" id="${uid}_${s.id}_${n}" value="${n}">
+                <label for="${uid}_${s.id}_${n}">${n}</label>
+              `).join('')}
+            </div>
+          </div>
+        `).join('')}
+      </div>
     `;
-    metricsDiv.appendChild(mDiv);
   });
 
-  return div;
+  blockDiv.innerHTML = html;
+  container.appendChild(blockDiv);
+});
+
+const totalRatings = blocks.reduce((s, b) => s + b.modifications.length, 0) * SCALES.length;
+
+function checkComplete() {
+  const completed = document.querySelectorAll('input[type="radio"]:checked').length;
+  document.getElementById('progress').textContent =
+    `${completed} de ${totalRatings} valoraciones completadas`;
+  document.getElementById('submitBtn').disabled = completed < totalRatings;
 }
 
-function showReference(ref) {
-  const content = document.getElementById('content');
-  content.innerHTML = '';
+document.querySelectorAll('input[type="radio"]').forEach(el => {
+  el.addEventListener('change', checkComplete);
+});
+checkComplete();
 
-  const rows = allData.filter(r => r.reference === ref);
-  const baseline = rows.find(r => r.modification === 'baseline');
-  const modifications = rows.filter(r => r.modification !== 'baseline')
-    .sort((a, b) => modSortKey(a.modification).localeCompare(modSortKey(b.modification)));
+document.getElementById('submitBtn').addEventListener('click', () => {
+  const raterId = document.getElementById('raterId').value.trim() || 'anonymous';
+  const timestamp = new Date().toISOString().replace(/:/g, '-').split('.')[0];
 
-  if (!baseline) {
-    content.innerHTML = `<p>No baseline found for ${ref}</p>`;
-    return;
-  }
+  let csv = 'rater_id,reference,stimulus,' + SCALES.map(s => s.id).join(',') + '\n';
 
-  content.appendChild(renderStimulus(baseline, baseline, true));
+  document.querySelectorAll('.stimulus').forEach(div => {
+    const filename = div.dataset.filename;
+    const reference = div.dataset.reference;
+    const ratings = SCALES.map(s => {
+      const checked = div.querySelector(`input[name$="_${s.id}"]:checked`);
+      return checked ? checked.value : '';
+    });
+    csv += `${raterId},${reference},${filename},${ratings.join(',')}\n`;
+  });
 
-  const header = document.createElement('div');
-  header.className = 'modifications-header';
-  header.textContent = 'Modifications';
-  content.appendChild(header);
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `ratings_${raterId}_${timestamp}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 
-  modifications.forEach(row => content.appendChild(renderStimulus(row, baseline, false)));
-}
-
-loadData().catch(err => {
-  document.getElementById('content').innerHTML =
-    `<p style="color:#c25c2c">Error loading data: ${err.message}.
-     Make sure you're running the server from the project root.</p>`;
+  alert('¡Gracias! El CSV se ha descargado. Envíaselo a Santi por email/WhatsApp.');
 });
 </script>
+
 </body>
 </html>

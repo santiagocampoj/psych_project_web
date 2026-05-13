@@ -98,3 +98,4 @@ psych_pro/
 - [ ] Exploratory metrics analysis (PCA, metric-metric correlations)
 - [ ] Web perceptual test
 - [ ] Metric ↔ perception correlation notebook
+- [ ] Consonancia/disonancia (range 1-5) & agradable desagradable (or 1-7)
