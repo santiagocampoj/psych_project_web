@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -135,90 +135,126 @@
 <h1>Perceptual Rating Task</h1>
 
 <div class="instructions">
-  <p><strong>Instrucciones:</strong></p>
+  <p><strong>Instructions:</strong></p>
   <ol>
-    <li>Pon el volumen de tus auriculares en un nivel cómodo con el primer audio. <strong>No modifiques el volumen durante el resto del test.</strong></li>
-    <li>Para cada bloque: <strong>escucha primero el audio de referencia</strong> (en amarillo). Luego escucha cada modificación.</li>
-    <li>Puntúa cada modificación en dos escalas:
+    <li>Set your headphone volume to a comfortable level using the first audio. <strong>Do not change the volume during the rest of the test.</strong></li>
+    <li>For each block: <strong>first listen to the reference audio</strong> (highlighted in yellow). Then listen to each modified version.</li>
+    <li>Rate each modification on two scales:
       <ul>
-        <li><strong>Consonancia / Disonancia</strong> — un sonido es consonante si te resulta armonioso, fluido. Disonante si te resulta chocante, áspero, tenso.</li>
-        <li><strong>Agradabilidad comparada con la referencia</strong> — ¿es este audio más, igual o menos agradable que el audio de referencia?</li>
+        <li><strong>Consonance / Dissonance</strong> — a sound is consonant if it feels harmonious and smooth. Dissonant if it feels harsh, rough, or tense.</li>
+        <li><strong>Pleasantness compared to the reference</strong> — is this audio more, equally, or less pleasant than the reference audio?</li>
       </ul>
     </li>
-    <li>Al terminar pulsa "Descargar mis resultados" y mándame el CSV.</li>
+    <li>When finished, click "Download my results" and send me the CSV file.</li>
   </ol>
 </div>
 
 <div class="id-input">
-  <label>Tu nombre o ID (anónimo OK):</label><br>
-  <input type="text" id="raterId" placeholder="ej. Andrés / R001">
+  <label>Name or ID:</label><br>
+  <input type="text" id="raterId" placeholder="Your Initials Here / SCJ">
 </div>
 
 <div id="blocks-container"></div>
 
 <div class="submit-bar">
   <div class="progress" id="progress"></div>
-  <button class="submit-btn" id="submitBtn" disabled>Descargar mis resultados</button>
+  <button class="submit-btn" id="submitBtn" disabled>Download results</button>
 </div>
 
 <script>
-// === EDITAR AQUÍ: bloques de test ===
+// === EDIT HERE: test blocks ===
 const TEST_BLOCKS = [
   {
     reference: 'pink_noise',
-    referenceLabel: 'Pink Noise (ruido rosa)',
+    referenceLabel: 'Pink Noise',
     referenceFile: 'pink_noise__baseline.wav',
-    referenceDescription: 'Ruido rosa estacionario, contiene todas las frecuencias con energía decreciente hacia los agudos.',
+    referenceDescription: 'Stationary pink noise containing all frequencies with decreasing energy toward higher frequencies.',
     modifications: [
-      { file: 'pink_noise__level_m6.wav', label: 'Nivel −6 dB',
-        description: 'Hemos bajado el nivel global 6 dB. Mismo contenido, más silencioso.' },
-      { file: 'pink_noise__level_p6.wav', label: 'Nivel +6 dB',
-        description: 'Hemos subido el nivel global 6 dB. Mismo contenido, más fuerte.' },
-      { file: 'pink_noise__lp_1kHz.wav', label: 'Filtro paso bajo a 1 kHz',
-        description: 'Hemos eliminado las frecuencias por encima de 1 kHz. Quedan solo los graves y medios bajos — suena opaco, sin agudos.' },
-      { file: 'pink_noise__am70_d10.wav', label: 'Modulación de amplitud a 70 Hz',
-        description: 'Hemos modulado el volumen a 70 Hz al 100%. Aparece una sensación rápida de aspereza/batido.' },
+        { file: 'pink_noise__level_m6.wav', label: 'Level -6 dB',
+        description: 'The global level has been reduced by 6 dB. Same content, quieter.' },
+      
+        { file: 'pink_noise__level_p6.wav', label: 'Level +6 dB',
+        description: 'The global level has been increased by 6 dB. Same content, louder.' },
+      
+        { file: 'pink_noise__lp_1kHz.wav', label: 'Low-pass filter at 1 kHz',
+        description: 'Frequencies above 1 kHz have been removed. Only bass and low mids remain — the sound becomes dull and lacks high frequencies.' },
+
+        { file: 'pink_noise__2p_1kHz.wav', label: 'Low-pass filter at 2 kHz',
+        description: 'Frequencies above 2 kHz have been removed. Only bass and low mids remain — the sound becomes dull and lacks high frequencies.' },
+
+        { file: 'pink_noise__4p_1kHz.wav', label: 'Low-pass filter at 4 kHz',
+        description: 'Frequencies above 4 kHz have been removed. Only bass and low mids remain — the sound becomes dull and lacks high frequencies.' },
+      
+        { file: 'pink_noise__am70_d10.wav', label: 'Amplitude modulation at 70 Hz',
+        description: 'The volume has been modulated at 70 Hz with 100% depth. A fast roughness/beating sensation appears.' },
+
+        { file: 'pink_noise__am70_d05.wav', label: 'Amplitude modulation at 70 Hz',
+        description: 'The volume has been modulated at 70 Hz with 50% depth. A fast roughness/beating sensation appears.' },
     ]
   },
   {
     reference: 'refrigerator',
-    referenceLabel: 'Refrigerador',
+    referenceLabel: 'Refrigerator',
     referenceFile: 'refrigerator__baseline.wav',
-    referenceDescription: 'Grabación del interior de una nevera real: zumbido grave del compresor con algo de ruido de fondo.',
+    referenceDescription: 'Recording from inside a real refrigerator: low-frequency compressor hum with some background noise.',
     modifications: [
-      { file: 'refrigerator__level_m6.wav', label: 'Nivel −6 dB',
-        description: 'Hemos bajado el nivel global 6 dB. Mismo contenido, más silencioso.' },
-      { file: 'refrigerator__level_p6.wav', label: 'Nivel +6 dB',
-        description: 'Hemos subido el nivel global 6 dB. Mismo contenido, más fuerte.' },
-      { file: 'refrigerator__lp_1kHz.wav', label: 'Filtro paso bajo a 1 kHz',
-        description: 'Hemos eliminado las frecuencias por encima de 1 kHz. Quedan solo el zumbido y los graves.' },
-      { file: 'refrigerator__am70_d10.wav', label: 'Modulación de amplitud a 70 Hz',
-        description: 'Hemos modulado el volumen a 70 Hz al 100%. Aparece una sensación rápida de aspereza/batido sobre el zumbido.' },
+        { file: 'refrigerator__level_m6.wav', label: 'Level −6 dB',
+          description: 'The global level has been reduced by 6 dB. Same content, quieter.' },
+
+        { file: 'refrigerator__level_p6.wav', label: 'Level +6 dB',
+          description: 'The global level has been increased by 6 dB. Same content, louder.' },
+
+        { file: 'refrigerator__lp_1kHz.wav', label: 'Low-pass filter at 1 kHz',
+          description: 'Frequencies above 1 kHz have been removed. Only the hum and low frequencies remain.' },
+
+        { file: 'refrigerator__lp_2kHz.wav', label: 'Low-pass filter at 2 kHz',
+          description: 'Frequencies above 2 kHz have been removed. Most high-frequency details disappear while the low hum remains dominant.' },
+
+        { file: 'refrigerator__lp_4kHz.wav', label: 'Low-pass filter at 4 kHz',
+          description: 'Frequencies above 4 kHz have been removed. The sound becomes softer and less bright.' },
+
+        { file: 'refrigerator__am70_d10.wav', label: 'Amplitude modulation at 70 Hz',
+          description: 'The volume has been modulated at 70 Hz with 100% depth. A fast roughness/beating sensation appears over the hum.' },
+
+        { file: 'refrigerator__am70_d05.wav', label: 'Amplitude modulation at 70 Hz',
+          description: 'The volume has been modulated at 70 Hz with 50% depth. A milder roughness/beating sensation appears over the hum.' },
     ]
   },
   {
     reference: 'livelypublicgarden',
-    referenceLabel: 'Parque público',
+    referenceLabel: 'Public Park',
     referenceFile: 'livelypublicgarden__baseline.wav',
-    referenceDescription: 'Ambiente de parque con gente, voces de niños jugando y ruido de fondo natural.',
+    referenceDescription: 'Park ambience with people, children’s voices, and natural background sounds.',
     modifications: [
-      { file: 'livelypublicgarden__level_m6.wav', label: 'Nivel −6 dB',
-        description: 'Hemos bajado el nivel global 6 dB. Mismo contenido, más silencioso.' },
-      { file: 'livelypublicgarden__level_p6.wav', label: 'Nivel +6 dB',
-        description: 'Hemos subido el nivel global 6 dB. Mismo contenido, más fuerte.' },
-      { file: 'livelypublicgarden__lp_1kHz.wav', label: 'Filtro paso bajo a 1 kHz',
-        description: 'Hemos eliminado las frecuencias por encima de 1 kHz. Las voces y los agudos del ambiente se atenúan mucho.' },
-      { file: 'livelypublicgarden__am70_d10.wav', label: 'Modulación de amplitud a 70 Hz',
-        description: 'Hemos modulado el volumen a 70 Hz al 100%. Aparece una sensación rápida de aspereza/batido.' },
+        { file: 'livelypublicgarden__level_m6.wav', label: 'Level −6 dB',
+          description: 'The global level has been reduced by 6 dB. Same content, quieter.' },
+
+        { file: 'livelypublicgarden__level_p6.wav', label: 'Level +6 dB',
+          description: 'The global level has been increased by 6 dB. Same content, louder.' },
+
+        { file: 'livelypublicgarden__lp_1kHz.wav', label: 'Low-pass filter at 1 kHz',
+          description: 'Frequencies above 1 kHz have been removed. Voices and high-frequency ambience are strongly attenuated.' },
+
+        { file: 'livelypublicgarden__lp_2kHz.wav', label: 'Low-pass filter at 2 kHz',
+          description: 'Frequencies above 2 kHz have been removed. Some vocal clarity and ambience details are reduced.' },
+
+        { file: 'livelypublicgarden__lp_4kHz.wav', label: 'Low-pass filter at 4 kHz',
+          description: 'Frequencies above 4 kHz have been removed. The ambience sounds softer and less crisp.' },
+
+        { file: 'livelypublicgarden__am70_d10.wav', label: 'Amplitude modulation at 70 Hz',
+          description: 'The volume has been modulated at 70 Hz with 100% depth. A fast roughness/beating sensation appears.' },
+
+        { file: 'livelypublicgarden__am70_d05.wav', label: 'Amplitude modulation at 70 Hz',
+          description: 'The volume has been modulated at 70 Hz with 50% depth. A milder roughness/beating sensation appears.' },
     ]
   },
 ];
 
 const SCALES = [
-  { id: 'consonance', label: 'Consonancia / Disonancia',
-    low: 'muy disonante', high: 'muy consonante' },
-  { id: 'pleasantness_vs_ref', label: 'Agradabilidad comparada con la referencia',
-    low: 'mucho menos', high: 'mucho más' },
+  { id: 'consonance', label: 'Consonance / Dissonance',
+    low: 'very dissonant', high: 'very consonant' },
+  { id: 'pleasantness_vs_ref', label: 'Pleasantness compared to the reference',
+    low: 'much less pleasant', high: 'much more pleasant' },
 ];
 
 // Shuffle helpers
@@ -232,10 +268,11 @@ function shuffle(arr) {
 }
 
 // Shuffle order of blocks AND order of modifications within each block
-const blocks = shuffle(TEST_BLOCKS).map(b => ({
-  ...b,
-  modifications: shuffle(b.modifications)
-}));
+// const blocks = shuffle(TEST_BLOCKS).map(b => ({
+//   ...b,
+//   modifications: shuffle(b.modifications)
+// }));
+const blocks = shuffle(TEST_BLOCKS);
 
 const container = document.getElementById('blocks-container');
 
@@ -244,11 +281,11 @@ blocks.forEach((block, blockIdx) => {
   blockDiv.className = 'block';
 
   let html = `
-    <div class="block-header">Bloque ${blockIdx + 1}: ${block.referenceLabel}</div>
+    <div class="block-header">Block ${blockIdx + 1}: ${block.referenceLabel}</div>
     <div class="reference">
-      <h3>📌 Audio de referencia</h3>
+      <h3>📌 Reference Audio</h3>
       <div class="reference-note">${block.referenceDescription}<br>
-        <em>Escúchalo bien antes de pasar a las modificaciones.</em></div>
+        <em>Listen carefully before moving on to the modified versions.</em></div>
       <audio controls preload="none" src="data/stimuli/${block.referenceFile}"></audio>
     </div>
   `;
@@ -288,7 +325,7 @@ const totalRatings = blocks.reduce((s, b) => s + b.modifications.length, 0) * SC
 function checkComplete() {
   const completed = document.querySelectorAll('input[type="radio"]:checked').length;
   document.getElementById('progress').textContent =
-    `${completed} de ${totalRatings} valoraciones completadas`;
+    `${completed} out of ${totalRatings} ratings completed`;
   document.getElementById('submitBtn').disabled = completed < totalRatings;
 }
 
@@ -323,7 +360,7 @@ document.getElementById('submitBtn').addEventListener('click', () => {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 
-  alert('¡Gracias! El CSV se ha descargado. Envíaselo a Santi por email/WhatsApp.');
+  alert('Thank you! The CSV file has been downloaded. Please send it to Santi by email or WhatsApp.');
 });
 </script>
 
