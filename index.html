@@ -151,7 +151,7 @@
 
 <div class="id-input">
   <label>Name or ID:</label><br>
-  <input type="text" id="raterId" placeholder="Your Initials Here / SCJ">
+  <input type="text" id="raterId" placeholder="Your Initials Here / e. g. SCJ">
 </div>
 
 <div id="blocks-container"></div>
@@ -165,58 +165,58 @@
 // === EDIT HERE: test blocks ===
 const TEST_BLOCKS = [
   {
-    reference: 'pink_noise',
-    referenceLabel: 'Pink Noise',
-    referenceFile: 'pink_noise__baseline.wav',
-    referenceDescription: 'Stationary pink noise containing all frequencies with decreasing energy toward higher frequencies.',
+    reference: 'blues',
+    referenceLabel: 'Acoustic Guitar',
+    referenceFile: 'blues__baseline.wav',
+    referenceDescription: 'Stationary acoustic guitar containing all frequencies with decreasing energy toward higher frequencies.',
     modifications: [
-        { file: 'pink_noise__level_m6.wav', label: 'Level -6 dB',
+        { file: 'blues__level_m6.wav', label: 'Level -6 dB',
         description: 'The global level has been reduced by 6 dB. Same content, quieter.' },
       
-        { file: 'pink_noise__level_p6.wav', label: 'Level +6 dB',
+        { file: 'blues__level_p6.wav', label: 'Level +6 dB',
         description: 'The global level has been increased by 6 dB. Same content, louder.' },
       
-        { file: 'pink_noise__lp_1kHz.wav', label: 'Low-pass filter at 1 kHz',
+        { file: 'blues__lp_1kHz.wav', label: 'Low-pass filter at 1 kHz',
         description: 'Frequencies above 1 kHz have been removed. Only bass and low mids remain — the sound becomes dull and lacks high frequencies.' },
 
-        { file: 'pink_noise__2p_1kHz.wav', label: 'Low-pass filter at 2 kHz',
+        { file: 'blues__2p_1kHz.wav', label: 'Low-pass filter at 2 kHz',
         description: 'Frequencies above 2 kHz have been removed. Only bass and low mids remain — the sound becomes dull and lacks high frequencies.' },
 
-        { file: 'pink_noise__4p_1kHz.wav', label: 'Low-pass filter at 4 kHz',
+        { file: 'blues__4p_1kHz.wav', label: 'Low-pass filter at 4 kHz',
         description: 'Frequencies above 4 kHz have been removed. Only bass and low mids remain — the sound becomes dull and lacks high frequencies.' },
       
-        { file: 'pink_noise__am70_d10.wav', label: 'Amplitude modulation at 70 Hz',
+        { file: 'blues__am70_d10.wav', label: 'Amplitude modulation at 70 Hz',
         description: 'The volume has been modulated at 70 Hz with 100% depth. A fast roughness/beating sensation appears.' },
 
-        { file: 'pink_noise__am70_d05.wav', label: 'Amplitude modulation at 70 Hz',
+        { file: 'blues__am70_d05.wav', label: 'Amplitude modulation at 70 Hz',
         description: 'The volume has been modulated at 70 Hz with 50% depth. A fast roughness/beating sensation appears.' },
     ]
   },
   {
-    reference: 'refrigerator',
-    referenceLabel: 'Refrigerator',
-    referenceFile: 'refrigerator__baseline.wav',
-    referenceDescription: 'Recording from inside a real refrigerator: low-frequency compressor hum with some background noise.',
+    reference: 'adult_female_speech',
+    referenceLabel: 'Speech',
+    referenceFile: 'adult_female_speech__baseline.wav',
+    referenceDescription: 'Recording from inside a real speech: low-frequency compressor hum with some background noise.',
     modifications: [
-        { file: 'refrigerator__level_m6.wav', label: 'Level −6 dB',
+        { file: 'adult_female_speech__level_m6.wav', label: 'Level −6 dB',
           description: 'The global level has been reduced by 6 dB. Same content, quieter.' },
 
-        { file: 'refrigerator__level_p6.wav', label: 'Level +6 dB',
+        { file: 'adult_female_speech__level_p6.wav', label: 'Level +6 dB',
           description: 'The global level has been increased by 6 dB. Same content, louder.' },
 
-        { file: 'refrigerator__lp_1kHz.wav', label: 'Low-pass filter at 1 kHz',
+        { file: 'adult_female_speech__lp_1kHz.wav', label: 'Low-pass filter at 1 kHz',
           description: 'Frequencies above 1 kHz have been removed. Only the hum and low frequencies remain.' },
 
-        { file: 'refrigerator__lp_2kHz.wav', label: 'Low-pass filter at 2 kHz',
+        { file: 'adult_female_speech__lp_2kHz.wav', label: 'Low-pass filter at 2 kHz',
           description: 'Frequencies above 2 kHz have been removed. Most high-frequency details disappear while the low hum remains dominant.' },
 
-        { file: 'refrigerator__lp_4kHz.wav', label: 'Low-pass filter at 4 kHz',
+        { file: 'adult_female_speech__lp_4kHz.wav', label: 'Low-pass filter at 4 kHz',
           description: 'Frequencies above 4 kHz have been removed. The sound becomes softer and less bright.' },
 
-        { file: 'refrigerator__am70_d10.wav', label: 'Amplitude modulation at 70 Hz',
+        { file: 'adult_female_speech__am70_d10.wav', label: 'Amplitude modulation at 70 Hz',
           description: 'The volume has been modulated at 70 Hz with 100% depth. A fast roughness/beating sensation appears over the hum.' },
 
-        { file: 'refrigerator__am70_d05.wav', label: 'Amplitude modulation at 70 Hz',
+        { file: 'adult_female_speech__am70_d05.wav', label: 'Amplitude modulation at 70 Hz',
           description: 'The volume has been modulated at 70 Hz with 50% depth. A milder roughness/beating sensation appears over the hum.' },
     ]
   },
@@ -246,6 +246,34 @@ const TEST_BLOCKS = [
 
         { file: 'livelypublicgarden__am70_d05.wav', label: 'Amplitude modulation at 70 Hz',
           description: 'The volume has been modulated at 70 Hz with 50% depth. A milder roughness/beating sensation appears.' },
+    ]
+  },
+  {
+    reference: 'refrigerator',
+    referenceLabel: 'Refrigerator',
+    referenceFile: 'refrigerator__baseline.wav',
+    referenceDescription: 'Recording from inside a real refrigerator: low-frequency compressor hum with some background noise.',
+    modifications: [
+        { file: 'refrigerator__level_m6.wav', label: 'Level −6 dB',
+          description: 'The global level has been reduced by 6 dB. Same content, quieter.' },
+
+        { file: 'refrigerator__level_p6.wav', label: 'Level +6 dB',
+          description: 'The global level has been increased by 6 dB. Same content, louder.' },
+
+        { file: 'refrigerator__lp_1kHz.wav', label: 'Low-pass filter at 1 kHz',
+          description: 'Frequencies above 1 kHz have been removed. Only the hum and low frequencies remain.' },
+
+        { file: 'refrigerator__lp_2kHz.wav', label: 'Low-pass filter at 2 kHz',
+          description: 'Frequencies above 2 kHz have been removed. Most high-frequency details disappear while the low hum remains dominant.' },
+
+        { file: 'refrigerator__lp_4kHz.wav', label: 'Low-pass filter at 4 kHz',
+          description: 'Frequencies above 4 kHz have been removed. The sound becomes softer and less bright.' },
+
+        { file: 'refrigerator__am70_d10.wav', label: 'Amplitude modulation at 70 Hz',
+          description: 'The volume has been modulated at 70 Hz with 100% depth. A fast roughness/beating sensation appears over the hum.' },
+
+        { file: 'refrigerator__am70_d05.wav', label: 'Amplitude modulation at 70 Hz',
+          description: 'The volume has been modulated at 70 Hz with 50% depth. A milder roughness/beating sensation appears over the hum.' },
     ]
   },
 ];
