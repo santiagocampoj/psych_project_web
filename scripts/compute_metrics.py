@@ -1,6 +1,3 @@
-"""Computa las cuatro métricas para todos los estímulos en data/stimuli/
-y guarda los resultados en results/metrics_table.csv.
-"""
 import csv
 from pathlib import Path
 

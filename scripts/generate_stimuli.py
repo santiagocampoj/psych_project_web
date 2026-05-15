@@ -1,7 +1,3 @@
-"""
-Genera todos los estímulos modificados a partir de las referencias
-preprocesadas, según la matriz definida en src/stimuli_config.py.
-"""
 import numpy as np
 import soundfile as sf
 from pathlib import Path

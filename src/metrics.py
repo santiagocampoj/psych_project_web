@@ -1,8 +1,3 @@
-"""Computa Loudness, Sharpness, Roughness y SII para un estímulo WAV.
-Asume que los WAVs vienen de preprocessing.py (RMS = 0.1) y que ese
-RMS representa 70 dB SPL. El factor de escala es FIJO, igual para
-todos los estímulos → las modificaciones de nivel se preservan.
-"""
 import numpy as np
 import soundfile as sf
 from mosqito.sq_metrics import (

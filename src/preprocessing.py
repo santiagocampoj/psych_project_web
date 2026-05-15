@@ -1,6 +1,3 @@
-"""
-Normalize the refe audio files
-"""
 import numpy as np
 import soundfile as sf
 from scipy.signal import resample_poly

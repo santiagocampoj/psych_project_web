@@ -1,12 +1,3 @@
-"""
-Cruza métricas físicas (results/metrics_table.csv) con puntuaciones
-perceptuales (CSVs individuales en data/responses/) y calcula correlaciones.
-
-Genera:
-  results/correlations.csv          - tabla de r y p por par
-  results/correlations_grid.png     - scatter plots (4x2)
-  results/correlations_heatmap.png  - heatmap de la matriz de r
-"""
 import pandas as pd
 import numpy as np
 from pathlib import Path

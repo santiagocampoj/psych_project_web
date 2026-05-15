@@ -1,101 +1,74 @@
-# Psychoacoustics Project — Perceptual analysis pipeline
+# Psychoacoustic Rating Task
 
-Study of how controlled audio modifications (filtering, level change, amplitude modulation, tone attenuation) affect **standard psychoacoustic metrics** (Loudness, Sharpness, Roughness, SII) and, in a second phase, the **perceptual responses** of listeners.
+## What you need
 
-## Pipeline
+- **Python 3** installed → if you don't have it: <https://www.python.org/downloads/> (any recent version works)
+- 10 minutes
 
-```
-data/reference_raw/              ← raw WAVs (4 references)
-       │
-       ▼  src/preprocessing.py
-data/reference/                  ← mono, 48 kHz, 5 s, RMS=0.05
-       │
-       ▼  scripts/generate_stimuli.py
-data/stimuli/                    ← 42 modified stimuli
-       │
-       ▼  scripts/compute_metrics.py
-results/metrics_table.csv        ← metrics per stimulus
-       │
-       ▼  app/  (pending)
-results/responses.csv            ← listener ratings (pending)
-       │
-       ▼  analysis/correlate.ipynb  (pending)
-metric ↔ perception correlation
-```
+## Step 1 — Download the project
 
-## How to reproduce
+Click the green **`<> Code`** button at the top of this GitHub page → **Download ZIP**.
 
-Requirements: Python 3.10+, `numpy scipy soundfile mosqito`.
+Unzip wherever you want — Desktop is fine. You'll get a folder like `psych_pro-main`.
+
+## Step 2 — Open a terminal in that folder
+
+**Windows**
+1. Open the unzipped folder in File Explorer.
+2. Click the address bar at the top, type `cmd`, press Enter. A black terminal opens already pointing to the right folder.
+
+**Mac**
+1. Open Terminal (`Cmd+Space`, type "Terminal", Enter).
+2. Type `cd ` (with a space) and then drag the unzipped folder into the terminal. Press Enter.
+
+**Linux**
+You know what to do.
+
+## Step 3 — Start the local server
+
+In the terminal, run:
 
 ```bash
-# Full pipeline:
-python run_pipeline.py
-
-# Or step by step:
-python -m src.preprocessing
-python -m scripts.generate_stimuli
-python -m scripts.compute_metrics
+python -m http.server 8000
 ```
 
-## Structure
+If that says "command not found", try `py -m http.server 8000` (Windows) or `python3 -m http.server 8000` (Mac/Linux).
+
+You should see something like:
 
 ```
-psych_pro/
-├── data/
-│   ├── reference_raw/       # raw WAVs (Freesound + synthesized pink noise)
-│   ├── reference/           # preprocessed
-│   └── stimuli/             # 42 stimuli
-├── src/
-│   ├── preprocessing.py     # mono, resample to 48 kHz, trim 5 s, fades, RMS=0.05
-│   ├── modifications.py     # change_level, lowpass/highpass_filter, AM, attenuate_tone
-│   ├── stimuli_config.py    # modification matrix
-│   └── metrics.py           # MoSQITo wrapper + fixed Pa scaling
-├── scripts/
-│   ├── generate_stimuli.py
-│   └── compute_metrics.py
-├── results/
-│   └── metrics_table.csv
-├── analysis/                # pending
-├── app/                     # pending
-├── run_pipeline.py
-└── README.md
+Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 ```
 
-## Design decisions
+**Leave this window open** for the entire test. Closing it stops the server.
 
-**Fixed Pa scaling.** The RMS=0.05 in preprocessed WAVs represents a 70 dB SPL baseline. The factor `SCALING_TO_PA = 1.264` is **the same for all 42 stimuli** — this is why level modifications are preserved (a +6 dB stimulus is correctly computed at 76 dB SPL).
+## Step 4 — Open the rating page
 
-**Modifications do not re-normalize RMS.** If a low-pass removes energy, SPL drops physically. This reflects the actual perceptual reality of each modification.
+In any browser, go to:
 
-**SII computed against `'loud'` speech (~75 dB ANSI).** At `'normal'` level, SII saturates to 0 with 70 dB baseline noise. `'loud'` gives a measurable dynamic range.
+<http://localhost:8000/rate.html>
 
-**6 dB headroom.** Lower RMS target (0.05 instead of 0.1) allows `change_level(+6)` without clipping.
+## Step 5 — Do the test
 
-## Computed metrics
+3. For each block: listen to the **reference audio** (highlighted in yellow) first, then each modified version.
+4. Rate each modification on the two scales (1–7).
+5. When all ratings are done, click **"Download my results"**. A CSV file will save to your Downloads folder.ç
 
-| Metric | Unit | Standard | MoSQITo function |
-|---|---|---|---|
-| Loudness | sone | ISO 532-1 | `loudness_zwst` |
-| Sharpness | acum | DIN 45692 | `sharpness_din_st` |
-| Roughness | asper | Daniel-Weber 1997 | `roughness_dw` |
-| SII | [0, 1] | ANSI S3.5 | `sii_ansi` |
+## Can't run the server? No problem.
 
-## Modifications
+Alternative: use the manual CSV template.
 
-10 common modifications × 4 references + 2 refrigerator-specific = **42 stimuli**.
+1. Open `rating_template.csv` in Excel / Numbers / Google Sheets.
+2. Listen to the audio files directly from `data/stimuli/` (just double-click them).
+3. Fill in your ratings (1–7) in the `consonance` and `pleasantness_vs_ref` columns.
+4. Save and send me the file.
 
-| Modification | Parameters | Target metric |
-|---|---|---|
-| `baseline` | no change | — |
-| `level_m6, m3, p3, p6` | ±3, ±6 dB | Loudness |
-| `lp_1kHz, 2kHz, 4kHz` | Butterworth order 4 | Sharpness |
-| `am70_d05, d10` | AM at 70 Hz, depth 0.5/1.0 | Roughness |
-| `tone_62_20dB, 40dB` | refrigerator only, Q=10 | (expected sub-perceptual) |
+The audio files are short (5 seconds each, ~40 MB total for all 32 stimuli).
 
-## Status
+## Step 6 — Send me the CSV
 
-- [x] Offline pipeline complete (preprocessing → stimuli → metrics)
-- [ ] Exploratory metrics analysis (PCA, metric-metric correlations)
-- [ ] Web perceptual test
-- [ ] Metric ↔ perception correlation notebook
-- [ ] Consonancia/disonancia (range 1-5) & agradable desagradable (or 1-7)
+Send the downloaded file (named like `YourInitialHere.csv`) to:
+
+That's it! Thank you.
+
+---

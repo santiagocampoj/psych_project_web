@@ -1,16 +1,3 @@
-"""
-Matriz de modificaciones a aplicar a cada referencia.
-
-COMMON_MODIFICATIONS  → se aplican a todas las referencias
-SPECIFIC_MODIFICATIONS → solo aplican a la referencia indicada
-                        (ej. attenuate_tone solo tiene sentido en señales tonales)
-
-Cada modificación es un dict con:
-    name   : nombre corto que va al nombre del archivo
-    fn     : nombre de la función en src.modifications (None = sin modificar)
-    params : kwargs que se pasan a la función
-"""
-
 COMMON_MODIFICATIONS = [
     {"name": "baseline","fn": None, "params": {}},
 

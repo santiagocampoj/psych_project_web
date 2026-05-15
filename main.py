@@ -3,6 +3,8 @@ import subprocess
 import sys
 import time
 
+
+
 STEPS = [
     ("Preprocesado de referencias", ["python", "-m", "src.preprocessing"]),
     ("Generación de estímulos", ["python", "-m", "scripts.generate_stimuli"]),
