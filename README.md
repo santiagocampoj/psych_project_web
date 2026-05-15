@@ -46,7 +46,7 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 
 In any browser, go to:
 
-<http://localhost:8000/rate.html>
+<http://[::1]:8000/psych_project_web/>
 
 ## Step 5 — Do the test
 
