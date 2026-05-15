@@ -1,29 +1,33 @@
-rater_id,reference,stimulus,consonance,pleasantness_vs_ref
-anonymous,adult_female_speech,adult_female_speech__level_m6.wav,5,5
-anonymous,adult_female_speech,adult_female_speech__level_p6.wav,5,5
-anonymous,adult_female_speech,adult_female_speech__lp_1kHz.wav,5,4
-anonymous,adult_female_speech,adult_female_speech__lp_2kHz.wav,3,4
-anonymous,adult_female_speech,adult_female_speech__lp_4kHz.wav,6,5
-anonymous,adult_female_speech,adult_female_speech__am70_d10.wav,7,6
-anonymous,adult_female_speech,adult_female_speech__am70_d05.wav,3,4
-anonymous,livelypublicgarden,livelypublicgarden__level_m6.wav,5,5
-anonymous,livelypublicgarden,livelypublicgarden__level_p6.wav,5,5
-anonymous,livelypublicgarden,livelypublicgarden__lp_1kHz.wav,5,1
-anonymous,livelypublicgarden,livelypublicgarden__lp_2kHz.wav,4,3
-anonymous,livelypublicgarden,livelypublicgarden__lp_4kHz.wav,3,4
-anonymous,livelypublicgarden,livelypublicgarden__am70_d10.wav,6,5
-anonymous,livelypublicgarden,livelypublicgarden__am70_d05.wav,2,3
-anonymous,blues,blues__level_m6.wav,4,4
-anonymous,blues,blues__level_p6.wav,3,5
-anonymous,blues,blues__lp_1kHz.wav,6,1
-anonymous,blues,blues__lp_2kHz.wav,1,2
-anonymous,blues,blues__lp_4kHz.wav,6,6
-anonymous,blues,blues__am70_d10.wav,7,7
-anonymous,blues,blues__am70_d05.wav,3,4
-anonymous,refrigerator,refrigerator__level_m6.wav,4,5
-anonymous,refrigerator,refrigerator__level_p6.wav,6,1
-anonymous,refrigerator,refrigerator__lp_1kHz.wav,5,6
-anonymous,refrigerator,refrigerator__lp_2kHz.wav,4,5
-anonymous,refrigerator,refrigerator__lp_4kHz.wav,4,3
-anonymous,refrigerator,refrigerator__am70_d10.wav,3,5
-anonymous,refrigerator,refrigerator__am70_d05.wav,4,3
+rater_id,reference,stimulus,modification,description,consonance,pleasantness_vs_ref
+,blues,blues__baseline.wav,REFERENCE,Listen to this first — reference for the Acoustic Guitar block. Do not rate.,,
+,blues,blues__level_m6.wav,Level -6 dB,"The global level has been reduced by 6 dB. Same content, quieter.",,
+,blues,blues__level_p6.wav,Level +6 dB,"The global level has been increased by 6 dB. Same content, louder.",,
+,blues,blues__lp_1kHz.wav,Low-pass filter at 1 kHz,"Frequencies above 1 kHz removed. Only bass and low mids remain — dull, no highs.",,
+,blues,blues__lp_2kHz.wav,Low-pass filter at 2 kHz,Frequencies above 2 kHz removed. Less high-frequency detail.,,
+,blues,blues__lp_4kHz.wav,Low-pass filter at 4 kHz,Frequencies above 4 kHz removed. Slight loss of brightness.,,
+,blues,blues__am70_d05.wav,Amplitude modulation at 70 Hz (50%),"Volume modulated at 70 Hz with 50% depth. Mild roughness/beating sensation.",,
+,blues,blues__am70_d10.wav,Amplitude modulation at 70 Hz (100%),"Volume modulated at 70 Hz with 100% depth. Strong roughness/beating sensation.",,
+,adult_female_speech,adult_female_speech__baseline.wav,REFERENCE,Listen to this first — reference for the Speech block. Do not rate.,,
+,adult_female_speech,adult_female_speech__level_m6.wav,Level -6 dB,"The global level has been reduced by 6 dB. Same content, quieter.",,
+,adult_female_speech,adult_female_speech__level_p6.wav,Level +6 dB,"The global level has been increased by 6 dB. Same content, louder.",,
+,adult_female_speech,adult_female_speech__lp_1kHz.wav,Low-pass filter at 1 kHz,"Frequencies above 1 kHz removed. The voice sounds muffled, no consonant clarity.",,
+,adult_female_speech,adult_female_speech__lp_2kHz.wav,Low-pass filter at 2 kHz,Frequencies above 2 kHz removed. Less consonant clarity.,,
+,adult_female_speech,adult_female_speech__lp_4kHz.wav,Low-pass filter at 4 kHz,Frequencies above 4 kHz removed. Slight loss of brightness.,,
+,adult_female_speech,adult_female_speech__am70_d05.wav,Amplitude modulation at 70 Hz (50%),"Volume modulated at 70 Hz with 50% depth. Mild roughness/beating sensation.",,
+,adult_female_speech,adult_female_speech__am70_d10.wav,Amplitude modulation at 70 Hz (100%),"Volume modulated at 70 Hz with 100% depth. Strong roughness/beating sensation.",,
+,livelypublicgarden,livelypublicgarden__baseline.wav,REFERENCE,Listen to this first — reference for the Public Park block. Do not rate.,,
+,livelypublicgarden,livelypublicgarden__level_m6.wav,Level -6 dB,"The global level has been reduced by 6 dB. Same content, quieter.",,
+,livelypublicgarden,livelypublicgarden__level_p6.wav,Level +6 dB,"The global level has been increased by 6 dB. Same content, louder.",,
+,livelypublicgarden,livelypublicgarden__lp_1kHz.wav,Low-pass filter at 1 kHz,Frequencies above 1 kHz removed. Voices and high-frequency ambience strongly attenuated.,,
+,livelypublicgarden,livelypublicgarden__lp_2kHz.wav,Low-pass filter at 2 kHz,Frequencies above 2 kHz removed. Some vocal clarity and ambience details reduced.,,
+,livelypublicgarden,livelypublicgarden__lp_4kHz.wav,Low-pass filter at 4 kHz,Frequencies above 4 kHz removed. Ambience sounds softer and less crisp.,,
+,livelypublicgarden,livelypublicgarden__am70_d05.wav,Amplitude modulation at 70 Hz (50%),"Volume modulated at 70 Hz with 50% depth. Mild roughness/beating sensation.",,
+,livelypublicgarden,livelypublicgarden__am70_d10.wav,Amplitude modulation at 70 Hz (100%),"Volume modulated at 70 Hz with 100% depth. Strong roughness/beating sensation.",,
+,refrigerator,refrigerator__baseline.wav,REFERENCE,Listen to this first — reference for the Refrigerator block. Do not rate.,,
+,refrigerator,refrigerator__level_m6.wav,Level -6 dB,"The global level has been reduced by 6 dB. Same content, quieter.",,
+,refrigerator,refrigerator__level_p6.wav,Level +6 dB,"The global level has been increased by 6 dB. Same content, louder.",,
+,refrigerator,refrigerator__lp_1kHz.wav,Low-pass filter at 1 kHz,Frequencies above 1 kHz removed. Only the hum and low frequencies remain.,,
+,refrigerator,refrigerator__lp_2kHz.wav,Low-pass filter at 2 kHz,Frequencies above 2 kHz removed. Most high-frequency details disappear.,,
+,refrigerator,refrigerator__lp_4kHz.wav,Low-pass filter at 4 kHz,Frequencies above 4 kHz removed. Sound becomes softer and less bright.,,
+,refrigerator,refrigerator__am70_d05.wav,Amplitude modulation at 70 Hz (50%),"Volume modulated at 70 Hz with 50% depth. Mild roughness/beating sensation appears over the hum.",,
+,refrigerator,refrigerator__am70_d10.wav,Amplitude modulation at 70 Hz (100%),"Volume modulated at 70 Hz with 100% depth. Strong roughness/beating sensation appears over the hum.",,
