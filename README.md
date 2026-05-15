@@ -7,9 +7,9 @@
 
 ## Step 1 — Download the project
 
-Click the green **`<> Code`** button at the top of this GitHub page → **Download ZIP**.
+Download the zip file from Santi.
 
-Unzip wherever you want — Desktop is fine. You'll get a folder like `psych_pro-main`.
+Unzip wherever you want — Desktop is fine. You'll get a folder like `psych_project_web`.
 
 ## Step 2 — Open a terminal in that folder
 
@@ -46,7 +46,7 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 
 In any browser, go to:
 
-<http://[::1]:8000/psych_project_web/>
+<http://[::1]:8000/psych_project_web/> or your port.
 
 ## Step 5 — Do the test
 
